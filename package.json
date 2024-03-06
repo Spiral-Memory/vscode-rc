@@ -1,0 +1,116 @@
+{
+  "name": "vscode-rc",
+  "displayName": "vscode-rc",
+  "description": "Learning to make vscode extension for rocket chat",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.87.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscode-rc-poc",
+          "title": "Rocket Chat",
+          "icon": "media/rc.svg"
+        }
+      ]
+    },
+    "views": {
+      "vscode-rc-poc": [
+        {
+          "type": "webview",
+          "id": "vsCodeRc.entry",
+          "name": "Rocket Chat"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "vsCodeRc.startDiscussion",
+        "title": "Send Message",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "vsCodeRc.reply",
+        "title": "Reply",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "vsCodeRc.refreshMsg",
+        "title": "Refresh",
+        "icon": {
+          "dark": "resources/refresh.svg",
+          "light": "resources/refresh.svg"
+        }
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "vsCodeRc.startDiscussion",
+          "when": "false"
+        },
+        {
+          "command": "vsCodeRc.reply",
+          "when": "false"
+        },
+        {
+          "command": "vsCodeRc.refreshMsg",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "vsCodeRc.refreshMsg",
+          "group": "navigation",
+          "when": "commentController == send-code && !commentThreadIsEmpty"
+        }
+      ],
+      "comments/commentThread/context": [
+        {
+          "command": "vsCodeRc.startDiscussion",
+          "group": "inline",
+          "when": "commentController == send-code && commentThreadIsEmpty"
+        },
+        {
+          "command": "vsCodeRc.reply",
+          "group": "inline",
+          "when": "commentController == send-code && !commentThreadIsEmpty"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node ./esbuild.js",
+    "package": "NODE_ENV=production node ./esbuild.js",
+    "watch": "node ./esbuild.js --watch",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.87.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "@vscode/test-cli": "^0.0.6",
+    "@vscode/test-electron": "^2.3.9",
+    "esbuild": "^0.16.17",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@rocket.chat/sdk": "^1.0.0-alpha.42",
+    "@vscode/webview-ui-toolkit": "^1.4.0"
+  }
+}
