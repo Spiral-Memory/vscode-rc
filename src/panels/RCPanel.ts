@@ -31,29 +31,47 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       "out",
       "webviewLogic.js",
     ]);
-    const cssStyles = getUri(webview, this._extensionUri, ["media", "index.css"]);
+    const cssStyles = getUri(webview, this._extensionUri, [
+      "media",
+      "index.css",
+    ]);
     const nonce = getNonce();
 
-    return /*html*/ `
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>RC VSCode Extension</title>
-          <link href="${cssStyles}" rel="stylesheet">
-        </head>
-        <body>
+    return /*html*/ `<!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>RC VSCode Extension</title>
+        <link href="${cssStyles}" rel="stylesheet">
+    </head>
+    
+    <body>
+        <div id = "login-page">
           <h1>Welcome to Rocket.Chat VSCode Extension</h1>
           <h2>Login</h2>
           <form id="login-form">
-          <vscode-text-field id ="username" size="50" placeholder="example@example.com" autofocus>Email or username *</vscode-text-field>
-          <vscode-text-field id = "password" size="50" type="password">Password *</vscode-text-field>
-          <vscode-button id="login-btn">Login</vscode-button>
+              <vscode-text-field id="username" size="50" placeholder="example@example.com" autofocus>Email or username
+                  *</vscode-text-field>
+              <vscode-text-field id="password" size="50" type="password">Password *</vscode-text-field>
+              <vscode-button id="login-btn">Login</vscode-button>
           </form>
-					<script type="module" nonce="${nonce}" src="${webviewUri}"></script>
-        </body>
-      </html>
+        </div>
+    
+        <div id = "chat-container">
+            <div id="message-view-box">
+            </div>
+            <div class="message-input-container">
+                <vscode-text-field id="msg-input" size="50" placeholder="Type your message ..."
+                    autofocus></vscode-text-field>
+                <vscode-button id="send-btn">Send</vscode-button>
+            </div>
+        </div>
+        <script type="module" nonce="${nonce}" src="${webviewUri}"></script>
+    </body>
+    
+    </html>
     `;
   }
 
@@ -65,6 +83,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       switch (status) {
         case "success":
           vscode.window.showInformationMessage(message);
+          // webview.html = this._setChatBody(webview);
           break;
         case "error":
           vscode.window.showErrorMessage(message);
