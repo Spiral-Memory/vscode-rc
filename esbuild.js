@@ -24,6 +24,14 @@ const webviewConfig = {
   outfile: "./out/webviewLogic.js",
 };
 
+const externalConfig = {
+  ...baseConfig,
+  platform: "node",
+  format: "esm",
+  entryPoints: ["./src/external/ddpRunner.ts"],
+  outfile: "./out/ddpRunner.js",
+};
+
 const watchConfig = {
   watch: {
     onRebuild(error, result) {
@@ -54,10 +62,15 @@ const watchConfig = {
         ...webviewConfig,
         ...watchConfig,
       });
+      await build({
+        ...externalConfig,
+        ...watchConfig,
+      });
       console.log("[watch] build finished");
     } else {
       await build(extensionConfig);
       await build(webviewConfig);
+      await build(externalConfig);
       console.log("build complete");
     }
   } catch (err) {

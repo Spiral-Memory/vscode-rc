@@ -39,13 +39,15 @@ async function handleLogin() {
       console.error("Fetch error:", error);
     });
 
-  console.log(res);
-
   if (res?.status === "success") {
+    const authToken = res.data.authToken;
     vscode.postMessage({
       status: "success",
       message: "Login Successful",
+      authToken:authToken,
     });
+    
+  
   } else {
     vscode.postMessage({
       status: "error",

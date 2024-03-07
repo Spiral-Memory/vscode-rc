@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
+import { listenToRoom } from "../external/ddpRunner";   
 
 export class RCPanelProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "vsCodeRc.entry";
@@ -31,7 +32,10 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       "out",
       "webviewLogic.js",
     ]);
-    const cssStyles = getUri(webview, this._extensionUri, ["media", "index.css"]);
+    const cssStyles = getUri(webview, this._extensionUri, [
+      "media",
+      "index.css",
+    ]);
     const nonce = getNonce();
 
     return /*html*/ `
@@ -61,10 +65,12 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
     webview.onDidReceiveMessage((data: any) => {
       const status = data.status;
       const message = data.message;
+      const authToken = data.authToken;
 
       switch (status) {
         case "success":
           vscode.window.showInformationMessage(message);
+          listenToRoom("GENERAL", authToken);
           break;
         case "error":
           vscode.window.showErrorMessage(message);
@@ -72,4 +78,6 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       }
     });
   }
+
+  
 }
