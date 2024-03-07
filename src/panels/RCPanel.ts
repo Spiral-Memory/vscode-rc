@@ -31,6 +31,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       "out",
       "webviewLogic.js",
     ]);
+    const cssStyles = getUri(webview, this._extensionUri, ["media", "index.css"]);
     const nonce = getNonce();
 
     return /*html*/ `
@@ -39,12 +40,17 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-					<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'nonce-${nonce}';">
-          <title>RC Extension</title>
+          <title>RC VSCode Extension</title>
+          <link href="${cssStyles}" rel="stylesheet">
         </head>
         <body>
-          <h1>Welcome to Rocket Chat VSCode Extension</h1>
-					<vscode-button id="howdy">Click Me</vscode-button>
+          <h1>Welcome to Rocket.Chat VSCode Extension</h1>
+          <h2>Login</h2>
+          <form id="login-form">
+          <vscode-text-field id ="username" size="50" placeholder="example@example.com" autofocus>Email or username *</vscode-text-field>
+          <vscode-text-field id = "password" size="50" type="password">Password *</vscode-text-field>
+          <vscode-button id="login-btn">Login</vscode-button>
+          </form>
 					<script type="module" nonce="${nonce}" src="${webviewUri}"></script>
         </body>
       </html>
@@ -52,14 +58,17 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
   }
 
   private _setWebviewMessageListener(webview: vscode.Webview) {
-    webview.onDidReceiveMessage((message: any) => {
-      const command = message.command;
-      const text = message.text;
+    webview.onDidReceiveMessage((data: any) => {
+      const status = data.status;
+      const message = data.message;
 
-      switch (command) {
-        case "hello":
-          vscode.window.showInformationMessage(text);
-          return;
+      switch (status) {
+        case "success":
+          vscode.window.showInformationMessage(message);
+          break;
+        case "error":
+          vscode.window.showErrorMessage(message);
+          break;
       }
     });
   }

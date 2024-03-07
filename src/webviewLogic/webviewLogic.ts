@@ -1,21 +1,55 @@
+import {
+  provideVSCodeDesignSystem,
+  vsCodeButton,
+  Button,
+  vsCodeTextField,
+  TextField,
+} from "@vscode/webview-ui-toolkit";
 
-import { provideVSCodeDesignSystem, vsCodeButton, Button } from "@vscode/webview-ui-toolkit";
-
-provideVSCodeDesignSystem().register(vsCodeButton());
+provideVSCodeDesignSystem().register(vsCodeButton(), vsCodeTextField());
 
 const vscode = acquireVsCodeApi();
 
 window.addEventListener("load", main);
 
 function main() {
-
-  const howdyButton = document.getElementById("howdy") as Button;
-  howdyButton?.addEventListener("click", handleHowdyClick);
+  const loginBtn = document.getElementById("login-btn") as Button;
+  loginBtn?.addEventListener("click", handleLogin);
 }
 
-function handleHowdyClick() {
-  vscode.postMessage({
-    command: "hello",
-    text: "Hey there, We welcome you to explore RC Vscode Externsion 🤠",
-  });
+async function handleLogin() {
+  let username = (document.getElementById("username") as TextField)?.value;
+  let password = (document.getElementById("password") as TextField)?.value;
+  const credentials = {
+    user: username,
+    password: password,
+  };
+
+  const res = await fetch("http://localhost:3000/api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  })
+    .then(async (response) => {
+      return await response.json();
+    })
+    .catch((error) => {
+      console.error("Fetch error:", error);
+    });
+
+  console.log(res);
+
+  if (res?.status === "success") {
+    vscode.postMessage({
+      status: "success",
+      message: "Login Successful",
+    });
+  } else {
+    vscode.postMessage({
+      status: "error",
+      message: res.message,
+    });
+  }
 }
