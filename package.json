@@ -9,7 +9,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+		"*"
+	],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -30,7 +32,44 @@
         }
       ]
     },
-    "commands": []
+    "commands": [
+      {
+        "command": "vsCodeRc.startDiscussion",
+        "title": "Send Message",
+        "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "vsCodeRc.reply",
+        "title": "Reply",
+        "enablement": "!commentIsEmpty"
+      }
+    ],
+    "menus": {
+
+      "commandPalette": [
+				{
+					"command": "vsCodeRc.startDiscussion",
+					"when": "false"
+				},
+				{
+					"command": "vsCodeRc.reply",
+					"when": "false"
+				}
+			],
+
+      "comments/commentThread/context": [
+        {
+          "command": "vsCodeRc.startDiscussion",
+          "group": "inline",
+          "when": "commentController == send-code && commentThreadIsEmpty"
+        },
+        {
+          "command": "vsCodeRc.reply",
+          "group": "inline",
+          "when": "commentController == send-code && !commentThreadIsEmpty"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
