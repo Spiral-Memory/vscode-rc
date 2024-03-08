@@ -18,6 +18,11 @@ function main() {
 
   const sendBtn = document.getElementById("send-btn") as Button;
   sendBtn?.addEventListener("click", handleSendMessage);
+
+  window.addEventListener("message", (event) => {
+    const message = event.data;
+    console.log(message);
+  });
 }
 
 let authToken = "";
@@ -45,7 +50,7 @@ async function handleSendMessage() {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        (document.getElementById("msg-input") as TextField)!.value = '';
+        (document.getElementById("msg-input") as TextField)!.value = "";
       })
       .catch((error) => console.error("Error:", error));
   }
@@ -122,5 +127,10 @@ async function listenMessage() {
     if (messageViewBox) {
       messageViewBox.innerHTML += newMsgTemplate;
     }
+  });
+
+  vscode.postMessage({
+    status: "fetched",
+    discussion: messages,
   });
 }

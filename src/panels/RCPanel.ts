@@ -6,9 +6,11 @@ import { getNonce } from "../utils/getNonce";
 export class RCPanelProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "vsCodeRc.entry";
 
-  private _view?: vscode.WebviewView;
+  public _view?: vscode.WebviewView;
 
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(private readonly _extensionUri: vscode.Uri) {
+    this.messagePasser = this.messagePasser.bind(this);
+  }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -24,6 +26,12 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
     this._setWebviewMessageListener(this._view.webview);
+  }
+
+  
+  public messagePasser(message: string) {
+    console.log("Message passer has been called");
+    this._view?.webview.postMessage({ command: message });
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
@@ -83,7 +91,6 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
       switch (status) {
         case "success":
           vscode.window.showInformationMessage(message);
-          // webview.html = this._setChatBody(webview);
           break;
         case "error":
           vscode.window.showErrorMessage(message);

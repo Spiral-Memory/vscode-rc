@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
-
+import { RCPanelProvider } from '../panels/RCPanel';
 let commentId = 1;
 let selectedText: string | undefined;
+
 
 class NoteComment implements vscode.Comment {
   id: number;
@@ -21,10 +22,11 @@ class NoteComment implements vscode.Comment {
 
 export class RCComment {
   public commentController: vscode.CommentController;
+  public messagePasser:any;
 
-  constructor() {
+  constructor(provider: RCPanelProvider) {
     this.commentController = vscode.comments.createCommentController("send-code", "Code Sharing RC");
-
+    this.messagePasser = provider.messagePasser;
     this.commentController.commentingRangeProvider = {
       provideCommentingRanges: (document: vscode.TextDocument) => {
         selectedText = this._getSelectedText();
@@ -38,7 +40,7 @@ export class RCComment {
   public replyNote(reply: vscode.CommentReply) {
     const thread = reply.thread;
     const newCommentBody = `${reply.text}`;
-
+    this.messagePasser(reply.text);
     const newComment = new NoteComment(
       newCommentBody,
       vscode.CommentMode.Preview,
@@ -68,5 +70,18 @@ export class RCComment {
     }
 
     return highlighted;
+  }
+
+  private _setWebviewMessageListener(webview: vscode.Webview) {
+    webview.onDidReceiveMessage((data: any) => {
+      const status = data.status;
+      const discussion = data.discussion;
+
+      switch (status) {
+        case "success":
+          vscode.window.showInformationMessage(discussion);
+          break;
+      }
+    });
   }
 }
