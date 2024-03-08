@@ -3,6 +3,7 @@ import { RCPanelProvider } from "./panels/RCPanel";
 import { RCComment } from "./comments/RCComments";
 export function activate(context: vscode.ExtensionContext) {
   const provider = new RCPanelProvider(context.extensionUri);
+  
   const rcComment = new RCComment(provider);
 
   context.subscriptions.push(
@@ -17,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "vsCodeRc.startDiscussion",
       (reply: vscode.CommentReply) => {
-        rcComment.replyNote(reply);
+        rcComment.replyNote(reply, true);
       }
     )
   );

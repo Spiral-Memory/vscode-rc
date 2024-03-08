@@ -29,9 +29,9 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
   }
 
   
-  public messagePasser(message: string) {
+  public messagePasser(message: any) {
     console.log("Message passer has been called");
-    this._view?.webview.postMessage({ command: message });
+    this._view?.webview.postMessage({ message: message });
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {

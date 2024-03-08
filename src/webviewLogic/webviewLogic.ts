@@ -17,19 +17,26 @@ function main() {
   loginBtn?.addEventListener("click", handleLogin);
 
   const sendBtn = document.getElementById("send-btn") as Button;
-  sendBtn?.addEventListener("click", handleSendMessage);
+  sendBtn?.addEventListener("click", () => {
+    handleSendMessage;
+  });
 
   window.addEventListener("message", (event) => {
-    const message = event.data;
-    console.log(message);
+    let data = event.data;
+    console.log(data);
+    data = '```\n' + data.message.code + '\n```'+ '\n' + data.message.replymsg;
+    handleSendMessage(true, data);
   });
 }
 
 let authToken = "";
 let userID = "";
 
-async function handleSendMessage() {
-  let message = (document.getElementById("msg-input") as TextField)?.value;
+async function handleSendMessage(isPassedMessage = false, passedMsg: string) {
+  let message = "";
+  message = isPassedMessage
+    ? passedMsg
+    : (document.getElementById("msg-input") as TextField)?.value;
   const requestOptions = {
     method: "POST",
     headers: {
