@@ -52,7 +52,9 @@ export class RCComment {
   public replyNote(reply: vscode.CommentReply, isCode = false) {
     const thread = reply.thread;
     const newCommentBody = `${reply.text}`;
-    isCode && this.messagePasser({ code: selectedText, replymsg: reply.text });
+    isCode
+      ? this.messagePasser({ code: selectedText, replymsg: reply.text })
+      : this.messagePasser({ code: "", replymsg: reply.text });
     const newComment = new NoteComment(
       newCommentBody,
       vscode.CommentMode.Preview,
