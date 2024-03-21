@@ -71,10 +71,17 @@ export class RCComment {
       threadId
     );
 
+    console.log(res);
+
     const newComment = new NoteComment(
       reply.text,
       vscode.CommentMode.Preview,
-      { name: `@${res.message.u?.username}` },
+      {
+        name: `@${res.message.u?.username}`,
+        iconPath: vscode.Uri.parse(
+          `https://open.rocket.chat/avatar/${res.message.u?.username}`
+        ),
+      },
       thread,
       thread.comments.length ? "canDelete" : undefined
     );
@@ -98,7 +105,12 @@ export class RCComment {
     const newComment = new NoteComment(
       reply.text,
       vscode.CommentMode.Preview,
-      { name: `@${res.message.u?.username}` },
+      {
+        name: `@${res.message.u?.username}`,
+        iconPath: vscode.Uri.parse(
+          `https://open.rocket.chat/avatar/${res.message.u?.username}`
+        ),
+      },
       thread,
       thread.comments.length ? "canDelete" : undefined
     );
@@ -122,7 +134,12 @@ export class RCComment {
       const newComment = new NoteComment(
         message.msg,
         vscode.CommentMode.Preview,
-        { name: `@${message.u?.username}` },
+        {
+          name: `@${message.u?.username}`,
+          iconPath: vscode.Uri.parse(
+            `https://open.rocket.chat/avatar/${message.u?.username}`
+          ),
+        },
         thread,
         thread.comments.length ? "canDelete" : undefined
       );
