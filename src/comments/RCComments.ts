@@ -38,7 +38,6 @@ export class RCComment {
       if (newSelectedText.length > (selectedText?.length || 0)) {
         selectedText = newSelectedText;
       }
-      //   console.log("Selected Text = ", selectedText);
     });
 
     this.commentController.commentingRangeProvider = {

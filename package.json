@@ -10,8 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-		"*"
-	],
+    "*"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "viewsContainers": {
@@ -45,18 +45,16 @@
       }
     ],
     "menus": {
-
       "commandPalette": [
-				{
-					"command": "vsCodeRc.startDiscussion",
-					"when": "false"
-				},
-				{
-					"command": "vsCodeRc.reply",
-					"when": "false"
-				}
-			],
-
+        {
+          "command": "vsCodeRc.startDiscussion",
+          "when": "false"
+        },
+        {
+          "command": "vsCodeRc.reply",
+          "when": "false"
+        }
+      ],
       "comments/commentThread/context": [
         {
           "command": "vsCodeRc.startDiscussion",
@@ -93,6 +91,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@rocket.chat/sdk": "^1.0.0-alpha.42",
     "@vscode/webview-ui-toolkit": "^1.4.0"
   }
 }

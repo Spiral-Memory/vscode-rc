@@ -20,8 +20,8 @@ const webviewConfig = {
   ...baseConfig,
   target: "es2020",
   format: "esm",
-  entryPoints: ["./src/webviewLogic/webviewLogic.ts"],
-  outfile: "./out/webviewLogic.js",
+  entryPoints: ["./src/webview/webview.ts"],
+  outfile: "./out/webview.js",
 };
 
 const watchConfig = {

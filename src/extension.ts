@@ -1,9 +1,11 @@
 import * as vscode from "vscode";
 import { RCPanelProvider } from "./panels/RCPanel";
 import { RCComment } from "./comments/RCComments";
+
+
 export function activate(context: vscode.ExtensionContext) {
   const provider = new RCPanelProvider(context.extensionUri);
-  
+
   const rcComment = new RCComment(provider);
 
   context.subscriptions.push(
@@ -31,6 +33,8 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
+
+
 
   // context.subscriptions.push(
   //   vscode.commands.registerCommand(

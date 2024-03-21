@@ -2,6 +2,15 @@ import * as vscode from "vscode";
 
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
+import { RocketChatRealtime } from "../api/realTimeapi";
+import { RocketChatApi } from "../api/api";
+
+const host = "http://localhost:3000";
+const apiClient = new RocketChatApi(host);
+const realtimeClient = new RocketChatRealtime(host);
+
+let authToken = "";
+let userId = "";
 
 export class RCPanelProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "vsCodeRc.entry";
@@ -28,7 +37,6 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
     this._setWebviewMessageListener(this._view.webview);
   }
 
-  
   public messagePasser(message: any) {
     console.log("Message passer has been called");
     this._view?.webview.postMessage({ message: message });
@@ -37,7 +45,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
   private _getHtmlForWebview(webview: vscode.Webview) {
     const webviewUri = getUri(webview, this._extensionUri, [
       "out",
-      "webviewLogic.js",
+      "webview.js",
     ]);
     const cssStyles = getUri(webview, this._extensionUri, [
       "media",
@@ -84,17 +92,41 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
   }
 
   private _setWebviewMessageListener(webview: vscode.Webview) {
-    webview.onDidReceiveMessage((data: any) => {
-      const status = data.status;
-      const message = data.message;
+    webview.onDidReceiveMessage(async (message: any) => {
+      if (message.method) {
+        const method = message.method;
+        const requestData = message.data;
 
-      switch (status) {
-        case "success":
-          vscode.window.showInformationMessage(message);
-          break;
-        case "error":
-          vscode.window.showErrorMessage(message);
-          break;
+        switch (method) {
+          case "login":
+            const res = await apiClient.handleLogin(requestData);
+            if (res.status === "success") {
+              vscode.window.showInformationMessage("Login Successful !");
+              authToken = res.data.authToken;
+              userId = res.data.userId;
+
+              const sendRealTimeMsg = (message: any) => {
+                webview.postMessage({ realTimeMsg: message });
+              };
+              realtimeClient.listenMessage(
+                authToken,
+                "GENERAL",
+                sendRealTimeMsg
+              );
+              const msgData = await apiClient.loadMessage(authToken, userId);
+              webview.postMessage({ messages: msgData.messages });
+            } else {
+              vscode.window.showErrorMessage("Oops! Login Failed");
+            }
+            break;
+
+          case "sendMessage":
+            await apiClient.handleSendMessage(
+              authToken,
+              userId,
+              requestData
+            );
+        }
       }
     });
   }
