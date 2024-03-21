@@ -7,6 +7,7 @@ const apiClient = new RocketChatApi(host);
 
 let selectedText: string | undefined;
 let commentId = 1;
+let mappings = new Map();
 
 class NoteComment implements vscode.Comment {
   savedBody: string | vscode.MarkdownString;
@@ -60,15 +61,15 @@ export class RCComment {
     );
 
     const threadId = sentResponse.message._id;
-
+    const range: any = thread.range;
+    const rangeString = `${range.start.line}-${range.start.character}-${range.end.line}-${range.end.character}`;
+    mappings.set(rangeString, threadId);
     const res = await apiClient.handleSendMessage(
       AuthData.getAuthToken(),
       AuthData.getUserId(),
       reply.text,
       threadId
     );
-
-    console.log(res);
 
     const newComment = new NoteComment(
       reply.text,
@@ -81,19 +82,18 @@ export class RCComment {
     thread.comments = [...thread.comments, newComment];
   }
 
-
-  
   public async replyNote(reply: vscode.CommentReply) {
     const thread = reply.thread;
-    console.log(thread);
+    const range: any = thread.range;
+    const rangeString = `${range.start.line}-${range.start.character}-${range.end.line}-${range.end.character}`;
+    const threadId = mappings.get(rangeString);
+
     const res = await apiClient.handleSendMessage(
       AuthData.getAuthToken(),
       AuthData.getUserId(),
-      reply.text
-      // threadId
+      reply.text,
+      threadId
     );
-
-    console.log(res);
 
     const newComment = new NoteComment(
       reply.text,
@@ -104,6 +104,31 @@ export class RCComment {
     );
 
     thread.comments = [...thread.comments, newComment];
+  }
+
+  public async refreshMsg(thread: vscode.CommentThread) {
+    const range: any = thread.range;
+    const rangeString = `${range.start.line}-${range.start.character}-${range.end.line}-${range.end.character}`;
+    const threadId = mappings.get(rangeString);
+    const res = await apiClient.getThreadMessage(
+      AuthData.getAuthToken(),
+      AuthData.getUserId(),
+      threadId
+    );
+
+    console.log(res);
+    thread.comments = [];
+    res.messages?.forEach((message: any) => {
+      const newComment = new NoteComment(
+        message.msg,
+        vscode.CommentMode.Preview,
+        { name: `@${message.u?.username}` },
+        thread,
+        thread.comments.length ? "canDelete" : undefined
+      );
+
+      thread.comments = [...thread.comments, newComment];
+    });
   }
 
   private _getSelectedText(): string {

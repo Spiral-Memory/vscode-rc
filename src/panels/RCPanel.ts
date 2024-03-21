@@ -104,7 +104,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
                 "GENERAL",
                 sendRealTimeMsg
               );
-              const msgData = await apiClient.loadMessage(
+              const msgData = await apiClient.getMessage(
                 AuthData.getAuthToken(),
                 AuthData.getUserId()
               );
@@ -120,6 +120,8 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
               AuthData.getUserId(),
               requestData
             );
+            vscode.commands.executeCommand("vsCodeRc.reply");
+            break;
         }
       }
     });

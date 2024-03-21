@@ -42,6 +42,14 @@
         "command": "vsCodeRc.reply",
         "title": "Reply",
         "enablement": "!commentIsEmpty"
+      },
+      {
+        "command": "vsCodeRc.refreshMsg",
+        "title": "Refresh",
+        "icon": {
+          "dark": "resources/refresh.svg",
+          "light": "resources/refresh.svg"
+        }
       }
     ],
     "menus": {
@@ -53,6 +61,17 @@
         {
           "command": "vsCodeRc.reply",
           "when": "false"
+        },
+        {
+          "command": "vsCodeRc.refreshMsg",
+          "when": "false"
+        }
+      ],
+      "comments/commentThread/title": [
+        {
+          "command": "vsCodeRc.refreshMsg",
+          "group": "navigation",
+          "when": "commentController == send-code && !commentThreadIsEmpty"
         }
       ],
       "comments/commentThread/context": [

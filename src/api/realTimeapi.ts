@@ -23,7 +23,6 @@ class RocketChatRealtime {
         await this.client.resume({ token });
         await this.client.subscribeRoom(rid);
         this.client.onMessage((message) => {
-          console.log(message);
           callback(message);
         });
       } catch (err) {

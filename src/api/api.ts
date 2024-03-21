@@ -5,7 +5,7 @@ class RocketChatApi {
     this.host = host;
   }
 
-  public async loadMessage(
+  public async getMessage(
     authToken: string | null,
     userID: string | null
   ): Promise<any> {
@@ -13,6 +13,31 @@ class RocketChatApi {
       try {
         const res = await fetch(
           `${this.host}/api/v1/channels.messages?roomId=GENERAL`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Auth-Token": authToken,
+              "X-User-Id": userID,
+            },
+          }
+        );
+        return await res.json();
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+  }
+
+  public async getThreadMessage(
+    authToken: string | null,
+    userID: string | null,
+    tmid: string | null
+  ): Promise<any> {
+    if (authToken && userID && tmid) {
+      try {
+        const res = await fetch(
+          `${this.host}/api/v1/chat.getThreadMessages?tmid=${tmid}`,
           {
             method: "GET",
             headers: {
@@ -61,7 +86,7 @@ class RocketChatApi {
         if (tmid) {
           requestBody.message.tmid = tmid;
         }
-  
+
         const res = await fetch(`${this.host}/api/v1/chat.sendMessage`, {
           method: "POST",
           headers: {
@@ -71,14 +96,13 @@ class RocketChatApi {
           },
           body: JSON.stringify(requestBody),
         });
-  
+
         return await res.json();
       } catch (error) {
         console.error("Send error:", error);
       }
     }
   }
-  
 }
 
 export { RocketChatApi };
