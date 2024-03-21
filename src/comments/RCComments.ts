@@ -44,7 +44,7 @@ export class RCComment {
     };
   }
 
-  public replyNote(reply: vscode.CommentReply, isCode = false) {
+  public replyNote(reply: vscode.CommentReply) {
     const thread = reply.thread;
     const newCommentBody = `${reply.text}`;
     const newComment = new NoteComment(
@@ -74,7 +74,6 @@ export class RCComment {
         highlighted = editor.document.getText(selectionRange);
       }
     }
-
     return highlighted;
   }
 }

@@ -5,22 +5,27 @@ class RocketChatApi {
     this.host = host;
   }
 
-  public async loadMessage(authToken: string, userID: string): Promise<any> {
-    try {
-      const res = await fetch(
-        `${this.host}/api/v1/channels.messages?roomId=GENERAL`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Auth-Token": authToken,
-            "X-User-Id": userID,
-          },
-        }
-      );
-      return await res.json();
-    } catch (error) {
-      console.error("Error:", error);
+  public async loadMessage(
+    authToken: string | null,
+    userID: string | null
+  ): Promise<any> {
+    if (authToken && userID) {
+      try {
+        const res = await fetch(
+          `${this.host}/api/v1/channels.messages?roomId=GENERAL`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Auth-Token": authToken,
+              "X-User-Id": userID,
+            },
+          }
+        );
+        return await res.json();
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
   }
 
@@ -40,29 +45,31 @@ class RocketChatApi {
   }
 
   public async handleSendMessage(
-    authToken: string,
-    userID: string,
+    authToken: string | null,
+    userID: string | null,
     message: any
   ): Promise<any> {
-    try {
-      const res = await fetch(`${this.host}/api/v1/chat.sendMessage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Auth-Token": authToken,
-          "X-User-Id": userID,
-        },
-        body: JSON.stringify({
-          message: {
-            rid: "GENERAL",
-            msg: message,
+    if (authToken && userID) {
+      try {
+        const res = await fetch(`${this.host}/api/v1/chat.sendMessage`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Auth-Token": authToken,
+            "X-User-Id": userID,
           },
-        }),
-      });
+          body: JSON.stringify({
+            message: {
+              rid: "GENERAL",
+              msg: message,
+            },
+          }),
+        });
 
-      return await res.json();
-    } catch (error) {
-      console.error("Send error:", error);
+        return await res.json();
+      } catch (error) {
+        console.error("Send error:", error);
+      }
     }
   }
 }

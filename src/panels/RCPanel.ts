@@ -4,13 +4,11 @@ import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
 import { RocketChatRealtime } from "../api/realTimeapi";
 import { RocketChatApi } from "../api/api";
+import { AuthData } from "../authData/authData";
 
 const host = "http://localhost:3000";
 const apiClient = new RocketChatApi(host);
 const realtimeClient = new RocketChatRealtime(host);
-
-let authToken = "";
-let userId = "";
 
 export class RCPanelProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "vsCodeRc.entry";
@@ -95,18 +93,21 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
             const res = await apiClient.handleLogin(requestData);
             if (res.status === "success") {
               vscode.window.showInformationMessage("Login Successful !");
-              authToken = res.data.authToken;
-              userId = res.data.userId;
+              AuthData.setAuthToken(res.data.authToken);
+              AuthData.setUserId(res.data.userId);
 
               const sendRealTimeMsg = (message: any) => {
                 webview.postMessage({ realTimeMsg: message });
               };
               realtimeClient.listenMessage(
-                authToken,
+                AuthData.getAuthToken(),
                 "GENERAL",
                 sendRealTimeMsg
               );
-              const msgData = await apiClient.loadMessage(authToken, userId);
+              const msgData = await apiClient.loadMessage(
+                AuthData.getAuthToken(),
+                AuthData.getUserId()
+              );
               webview.postMessage({ messages: msgData.messages });
             } else {
               vscode.window.showErrorMessage("Oops! Login Failed");
@@ -114,7 +115,11 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
             break;
 
           case "sendMessage":
-            await apiClient.handleSendMessage(authToken, userId, requestData);
+            await apiClient.handleSendMessage(
+              AuthData.getAuthToken(),
+              AuthData.getUserId(),
+              requestData
+            );
         }
       }
     });

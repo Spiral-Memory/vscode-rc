@@ -13,20 +13,22 @@ class RocketChatRealtime {
   }
 
   public async listenMessage(
-    token: string,
+    token: string | null,
     rid: string,
     callback: any
   ): Promise<void> {
-    try {
-      await this.client.connect({});
-      await this.client.resume({ token });
-      await this.client.subscribeRoom(rid);
-      this.client.onMessage((message) => {
-        console.log(message);
-        callback(message);
-      });
-    } catch (err) {
-      console.log(err);
+    if (token) {
+      try {
+        await this.client.connect({});
+        await this.client.resume({ token });
+        await this.client.subscribeRoom(rid);
+        this.client.onMessage((message) => {
+          console.log(message);
+          callback(message);
+        });
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 }
