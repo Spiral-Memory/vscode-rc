@@ -19,19 +19,19 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
       "vsCodeRc.startDiscussion",
       (reply: vscode.CommentReply) => {
-        rcComment.replyNote(reply);
+        rcComment.startDiscussion(reply);
       }
     )
   );
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand(
-      "vsCodeRc.reply",
-      (reply: vscode.CommentReply) => {
-        rcComment.replyNote(reply);
-      }
-    )
-  );
+  // context.subscriptions.push(
+  //   vscode.commands.registerCommand(
+  //     "vsCodeRc.reply",
+  //     (reply: vscode.CommentReply) => {
+  //       rcComment.replyNote(reply);
+  //     }
+  //   )
+  // );
 }
 
 export function deactivate() {}

@@ -47,10 +47,21 @@ class RocketChatApi {
   public async handleSendMessage(
     authToken: string | null,
     userID: string | null,
-    message: any
+    message: any,
+    tmid?: any
   ): Promise<any> {
     if (authToken && userID) {
       try {
+        const requestBody: any = {
+          message: {
+            rid: "GENERAL",
+            msg: message,
+          },
+        };
+        if (tmid) {
+          requestBody.message.tmid = tmid;
+        }
+  
         const res = await fetch(`${this.host}/api/v1/chat.sendMessage`, {
           method: "POST",
           headers: {
@@ -58,20 +69,16 @@ class RocketChatApi {
             "X-Auth-Token": authToken,
             "X-User-Id": userID,
           },
-          body: JSON.stringify({
-            message: {
-              rid: "GENERAL",
-              msg: message,
-            },
-          }),
+          body: JSON.stringify(requestBody),
         });
-
+  
         return await res.json();
       } catch (error) {
         console.error("Send error:", error);
       }
     }
   }
+  
 }
 
 export { RocketChatApi };

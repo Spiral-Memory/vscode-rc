@@ -59,7 +59,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
           <h1>Welcome to Rocket.Chat VSCode Extension</h1>
           <h2>Login</h2>
           <form id="login-form">
-              <vscode-text-field id="username" size="50" placeholder="example@example.com" autofocus>Email or username
+              <vscode-text-field id="username" size="50" placeholder="example@example.com">Email or username
                   *</vscode-text-field>
               <vscode-text-field id="password" size="50" type="password">Password *</vscode-text-field>
               <vscode-button id="login-btn">Login</vscode-button>
@@ -71,7 +71,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
             </div>
             <div class="message-input-container">
                 <vscode-text-field id="msg-input" size="50" placeholder="Type your message ..."
-                    autofocus></vscode-text-field>
+                    ></vscode-text-field>
                 <vscode-button id="send-btn">Send</vscode-button>
             </div>
         </div>
