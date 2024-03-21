@@ -24,14 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
     )
   );
 
-  // context.subscriptions.push(
-  //   vscode.commands.registerCommand(
-  //     "vsCodeRc.reply",
-  //     (reply: vscode.CommentReply) => {
-  //       rcComment.replyNote(reply);
-  //     }
-  //   )
-  // );
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vsCodeRc.reply",
+      (reply: vscode.CommentReply) => {
+        rcComment.replyNote(reply);
+      }
+    )
+  );
 }
 
 export function deactivate() {}

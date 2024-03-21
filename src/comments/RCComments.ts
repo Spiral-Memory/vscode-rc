@@ -6,20 +6,20 @@ const host = "http://localhost:3000";
 const apiClient = new RocketChatApi(host);
 
 let selectedText: string | undefined;
+let commentId = 1;
 
 class NoteComment implements vscode.Comment {
-  label: string | undefined;
   savedBody: string | vscode.MarkdownString;
+  id: number;
 
   constructor(
     public body: string | vscode.MarkdownString,
     public mode: vscode.CommentMode,
     public author: vscode.CommentAuthorInformation,
-    public id: number,
     public parent?: vscode.CommentThread,
     public contextValue?: string
   ) {
-    this.id = id;
+    this.id = ++commentId;
     this.savedBody = this.body;
   }
 }
@@ -66,7 +66,7 @@ export class RCComment {
       AuthData.getUserId(),
       reply.text,
       threadId
-    ); 
+    );
 
     console.log(res);
 
@@ -74,7 +74,31 @@ export class RCComment {
       reply.text,
       vscode.CommentMode.Preview,
       { name: `@${res.message.u?.username}` },
-      threadId,
+      thread,
+      thread.comments.length ? "canDelete" : undefined
+    );
+
+    thread.comments = [...thread.comments, newComment];
+  }
+
+
+  
+  public async replyNote(reply: vscode.CommentReply) {
+    const thread = reply.thread;
+    console.log(thread);
+    const res = await apiClient.handleSendMessage(
+      AuthData.getAuthToken(),
+      AuthData.getUserId(),
+      reply.text
+      // threadId
+    );
+
+    console.log(res);
+
+    const newComment = new NoteComment(
+      reply.text,
+      vscode.CommentMode.Preview,
+      { name: `@${res.message.u?.username}` },
       thread,
       thread.comments.length ? "canDelete" : undefined
     );
