@@ -5,8 +5,7 @@ import { RCComment } from "./comments/RCComments";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new RCPanelProvider(context.extensionUri);
-
-  const rcComment = new RCComment(provider);
+  const rcComment = new RCComment();
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -33,17 +32,6 @@ export function activate(context: vscode.ExtensionContext) {
       }
     )
   );
-
-
-
-  // context.subscriptions.push(
-  //   vscode.commands.registerCommand(
-  //     "vsCodeRC.fetchDiscussion",
-  //     (reply: vscode.CommentReply) => {
-  //       rcComment.fetchMessage(reply);
-  //     }
-  //   )
-  // );
 }
 
 export function deactivate() {}

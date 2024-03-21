@@ -17,9 +17,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
 
   public _view?: vscode.WebviewView;
 
-  constructor(private readonly _extensionUri: vscode.Uri) {
-    this.messagePasser = this.messagePasser.bind(this);
-  }
+  constructor(private readonly _extensionUri: vscode.Uri) {}
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -35,11 +33,6 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
     this._setWebviewMessageListener(this._view.webview);
-  }
-
-  public messagePasser(message: any) {
-    console.log("Message passer has been called");
-    this._view?.webview.postMessage({ message: message });
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
@@ -121,11 +114,7 @@ export class RCPanelProvider implements vscode.WebviewViewProvider {
             break;
 
           case "sendMessage":
-            await apiClient.handleSendMessage(
-              authToken,
-              userId,
-              requestData
-            );
+            await apiClient.handleSendMessage(authToken, userId, requestData);
         }
       }
     });

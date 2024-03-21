@@ -59,7 +59,7 @@ async function handleLogin() {
   });
 }
 
-async function renderMessage(messages) {
+async function renderMessage(messages: any) {
   document.getElementById("login-page")!.style.display = "none";
   document.getElementById("chat-container")!.style.display = "flex";
   const messageViewBox = document.getElementById("message-view-box");
@@ -75,14 +75,9 @@ async function renderMessage(messages) {
       messageViewBox.innerHTML += newMsgTemplate;
     }
   });
-
-  vscode.postMessage({
-    status: "fetched",
-    discussion: messages,
-  });
 }
 
-async function renderMsgRealtime(message) {
+async function renderMsgRealtime(message:any) {
   const messageViewBox = document.getElementById("message-view-box");
   const newMsgTemplate = `
   <div class="message-body">
