@@ -1,71 +1,49 @@
-# vscode-rc README
+# VSCode Extension for Rocket.Chat
 
-This is the README for your extension "vscode-rc". After writing up a brief description, we recommend including the following sections.
+## Overview
+VSCode Extension for Rocket.Chat is a VSCode extension that allows you to seamlessly integrate chat functionality into your coding environment. With this extension, you can communicate with your teammates directly within VSCode, making collaboration more efficient and streamlined.
 
 ## Features
+- Chat in the GENERAL channel of your Rocket Chat workspace.
+- Discuss code segments with your teammates in real-time.
+- Easy-to-use interface directly within the VSCode editor.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Installation
+To use VSCode RC Extension, follow these steps:
 
-For example if there is an image subfolder under your extension project workspace:
+1. Clone the repository to your local machine:
+   ```bash
+   git clone https://github.com/Spiral-Memory/vscode-rc.git
+   ```
 
-\!\[feature X\]\(images/feature-x.png\)
+2. Move to the repository directory:
+   ```bash
+   cd vscode-rc
+   ```
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+3. Open the code sample in Visual Studio Code.
 
-## Requirements
+4. Press `F5` to start the extension.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+## Usage
+Once the extension is up and running, follow these steps to utilize its features:
 
-## Extension Settings
+1. Look for the Rocket Chat icon in the VSCode sidebar and click on it.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+2. Log in with your Rocket Chat credentials.
 
-For example:
+3. You'll be directed to the GENERAL channel where you can start chatting with your teammates.
 
-This extension contributes the following settings:
+4. To discuss a specific code segment, open any project in VSCode, select the code segment you want to discuss.
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+5. A popup will open, allowing you to have a chat conversation about that specific code segment with your teammates.
 
-## Known Issues
+## Prerequisites
+Before using this extension, ensure that you have the following:
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Rocket Chat server running locally on port 3000 or change the required code in extension.
+  - If you don't have Rocket Chat installed, you can set it up by following the instructions on the [Rocket Chat website](https://developer.rocket.chat/open-source-projects/server/server-environment-setup).
+  - Make sure the Rocket Chat server is running and accessible at http://localhost:3000.
 
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+## Contributing
+Contributions are welcome! Feel free to fork the repository, make your changes, and submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
